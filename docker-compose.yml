@@ -1,0 +1,35 @@
+services:
+  jooq-postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: "myuser"
+      POSTGRES_PASSWORD: "mypassword"
+      POSTGRES_DB: "mydb"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init/init_postgres.sql:/docker-entrypoint-initdb.d/init.sql
+
+  jooq-mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: "mypassword"
+      MYSQL_DATABASE: "mydb"
+      MYSQL_USER: "myuser"
+      MYSQL_PASSWORD: "mypassword"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init/init_mysql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  jooq-mariadb:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: "mypassword"
+      MARIADB_DATABASE: "mydb"
+      MARIADB_USER: "myuser"
+      MARIADB_PASSWORD: "mypassword"
+    ports:
+      - "3307:3307"
+    volumes:
+      - ./init/init_mysql.sql:/docker-entrypoint-initdb.d/init.sql
