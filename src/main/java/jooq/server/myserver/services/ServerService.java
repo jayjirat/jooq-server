@@ -27,7 +27,7 @@ import jooq.server.myserver.utils.ServerUtil;
 public class ServerService {
     private final DSLContext dslContext;
     private ServerUtil serverUtil;
-    private Map<String, ServerUtil> serverUtilMap;
+    private final Map<String, ServerUtil> serverUtilMap;
 
     public ServerService(DSLContext dslContext) {
         this.dslContext = dslContext;
@@ -91,14 +91,14 @@ public class ServerService {
                 condition = DSL.noCondition();
             }
 
-            ServerUtil serverUtil = serverUtilMap.get(request.jarName());
+            ServerUtil myServerUtil = serverUtilMap.get(request.jarName());
 
-            if (serverUtil == null) {
+            if (myServerUtil == null) {
                 throw new DslMethodLoadException("No JAR loaded with name: " + request.jarName());
             }
 
-            Result<?> result = (Result<?>) serverUtil
-                    .invoke(request.methodName(), serverUtil, dslContext, condition);
+            Result<?> result = (Result<?>) myServerUtil
+                    .invoke(request.methodName(), myServerUtil, dslContext, condition);
 
             List<Map<String, Object>> response = result.stream()
                     .map(record -> record.intoMap())
