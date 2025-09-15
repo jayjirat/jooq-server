@@ -1,0 +1,10 @@
+# Base image: Maven + JDK
+FROM maven:3.9-eclipse-temurin-21
+
+# Install Docker client
+RUN apt-get update && apt-get install -y docker.io curl
+
+# Install Trivy
+RUN curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+WORKDIR /app

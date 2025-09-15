@@ -19,28 +19,36 @@ This project provides a flexible way to execute JOOQ queries by uploading compil
 ## API Endpoints
 
 ### 1. Upload JAR File
+
 ```
 POST /api/jar/upload
 ```
+
 Upload a JAR file containing JOOQ query methods.
 
 **Request:**
+
 - Content-Type: `multipart/form-data`
 - Form field: `file` (the JAR file)
 
 ### 2. List Methods
+
 ```
 GET /api/jar/methods
 ```
+
 Retrieve all available methods from uploaded JAR files.
 
 ### 3. Execute Method
+
 ```
 POST /api/jar/execute
 ```
+
 Execute a specific method with provided conditions.
 
 **Request Body:**
+
 ```json
 {
   "jarName": "string",
@@ -89,7 +97,7 @@ public class MyQuery {
                 .where(condition)
                 .fetch();
     }
-    
+
     public static Result<?> getOrder(DSLContext dsl, Condition condition) {
         return dsl.selectFrom("orders")
                 .where(condition)
@@ -99,6 +107,7 @@ public class MyQuery {
 ```
 
 **Requirements:**
+
 - Methods must be `public static`
 - Return type must be `Result<?>`
 - Must accept exactly two parameters: `DSLContext dsl` and `Condition condition`
@@ -113,6 +122,7 @@ public class MyQuery {
 ## Example Usage
 
 ### Upload JAR
+
 ```bash
 curl -X POST \
   -F "file=@myclient.jar" \
@@ -120,11 +130,13 @@ curl -X POST \
 ```
 
 ### List Methods
+
 ```bash
 curl -X GET http://localhost:8080/api/jar/methods
 ```
 
 ### Execute Method
+
 ```bash
 curl -X POST \
   -H "Content-Type: application/json" \
@@ -158,6 +170,7 @@ curl -X POST \
 ```
 
 ### Example Response
+
 ```json
 [
   {
@@ -184,6 +197,7 @@ curl -X POST \
 ## Supported Operators
 
 ### Comparison Operators
+
 - `EQUALS` - Equal to
 - `NOT_EQUALS` - Not equal to
 - `GREATER_THAN` - Greater than
@@ -193,6 +207,7 @@ curl -X POST \
 - `LIKE` - Pattern matching
 
 ### Logical Operators
+
 - `AND` - Logical AND
 - `OR` - Logical OR
 - `NOT` - Logical NOT
@@ -214,6 +229,25 @@ Conditions support nested structures for complex queries:
 - **No Error Handling**: Minimal error handling for edge cases
 - **Single Database**: Assumes single database connection
 - **Memory Usage**: Loaded JARs remain in memory
+
+## CI Pipeline Test with Trivy
+
+### Build CI Image
+
+```bash
+docker build -f Dockerfile.ci -t ci-pipeline:latest .
+```
+
+### Run CI Pipeline
+
+```bash
+docker run --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v ./:/app \
+  -w /app \
+  ci-pipeline:latest \
+  bash ci.sh
+```
 
 ## Development Notes
 
